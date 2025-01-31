@@ -4,10 +4,9 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { koKR } from "@mui/x-date-pickers/locales";
 import dayjs, { Dayjs } from "dayjs";
-import "dayjs/locale/ko"; // 한국어 로케일 import
+import "dayjs/locale/ko";
 import { Button, Typography } from "@mui/material";
 
-// dayjs에 한국어 설정 적용
 dayjs.locale("ko");
 
 function App() {
@@ -48,6 +47,13 @@ function App() {
         }
       >
         <DatePicker
+          sx={{
+            color: "white",
+            borderColor: "white",
+            backgroundColor: "white",
+            width: "100%",
+            margin: "10rem 0",
+          }}
           label="생년월일 선택"
           value={birthDate}
           onChange={(newValue) => setBirthDate(newValue)}
@@ -58,7 +64,7 @@ function App() {
         variant="contained"
         color="primary"
         onClick={calculateAge}
-        style={{ marginTop: "10px" }}
+        style={{ padding: "10px 20px", width: "100%" }}
       >
         계산하기
       </Button>
