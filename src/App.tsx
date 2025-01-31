@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { koKR } from "@mui/x-date-pickers/locales";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ko"; // 한국어 로케일 import
+import { Button, Typography } from "@mui/material";
+
+// dayjs에 한국어 설정 적용
+dayjs.locale("ko");
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [birthDate, setBirthDate] = useState<Dayjs | null>(null);
+  const [age, setAge] = useState<string>("");
+
+  const calculateAge = () => {
+    if (!birthDate) return;
+
+    const today = new Date();
+    const birth = birthDate.toDate();
+
+    let years = today.getFullYear() - birth.getFullYear();
+    let months = today.getMonth() - birth.getMonth();
+    let days = today.getDate() - birth.getDate();
+
+    if (days < 0) {
+      months -= 1;
+      days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+    }
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    setAge(`${years}년 ${months}개월 ${days}일`);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <h1>생활연령 계산기</h1>
+      <p>태어난 연도를 선택해주세요</p>
+
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        localeText={
+          koKR.components.MuiLocalizationProvider.defaultProps.localeText
+        }
+      >
+        <DatePicker
+          label="생년월일 선택"
+          value={birthDate}
+          onChange={(newValue) => setBirthDate(newValue)}
+        />
+      </LocalizationProvider>
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={calculateAge}
+        style={{ marginTop: "10px" }}
+      >
+        계산하기
+      </Button>
+
+      {age && (
+        <Typography variant="h6" style={{ marginTop: "10px" }}>
+          생활연령: {age}
+        </Typography>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
