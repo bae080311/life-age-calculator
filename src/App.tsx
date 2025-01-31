@@ -52,7 +52,7 @@ function App() {
             borderColor: "white",
             backgroundColor: "white",
             width: "100%",
-            margin: "10rem 0",
+            margin: "12rem 0",
           }}
           label="생년월일 선택"
           value={birthDate}
